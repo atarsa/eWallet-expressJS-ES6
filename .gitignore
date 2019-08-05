@@ -1,0 +1,4 @@
+node_modules
+routes/posts.js
+.env
+.eslintrc.js
