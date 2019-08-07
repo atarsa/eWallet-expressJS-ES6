@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 // Import routes
 const authRoute = require('./routes/auth');
 const itemRoute = require('./routes/items');
+const baseCurrencyRoute = require('./routes/baseCurrency');
+
 dotenv.config();
 
 // Connect to DB
@@ -20,5 +22,6 @@ app.use(express.json());
 // Route Middlewares
 app.use('/api/user', authRoute);
 app.use('/api/items', itemRoute);
+app.use('/api/base', baseCurrencyRoute);
 
 app.listen(3000, () => console.log("Server listening on port 3000... "));
