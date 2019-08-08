@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Wallet = require('../model/Wallet');
-const userValidation = require('../validation');
+const {userValidation} = require('../validation');
 const bcrypt =  require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  // Validate the date before creating a user
+  // Validate the data before creating a user
   const {error} = userValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

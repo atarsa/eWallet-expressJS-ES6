@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const verify = require('./verifyToken');
 const Wallet = require('../model/Wallet');
+const {itemValidation} = require('../validation');
+const {amountValidation} = require('../validation');
 
 // Get all items from wallet
 router.get('/', verify, (req, res) => {
@@ -16,6 +18,11 @@ router.get('/', verify, (req, res) => {
 
 // Add item to wallet
 router.post('/', verify, (req, res) => {
+  // Validate the data before creating an item
+  const {error} = itemValidation(req.body);
+
+  if (error) return res.status(400).send(error.details[0].message);
+
   const item = {
     id: req.body.id,
     currency: req.body.currency,
@@ -50,9 +57,15 @@ router.delete('/:id', verify, (req, res) =>{
      })
 });
 
-// *For now PUT method by id, should be changed to currency as suposed to be unique??
+// *For now PUT method by id, should be changed to currency as supposed to be unique anyway??
+
 // Update amount of item in wallet
 router.put('/:id', verify, (req, res) =>{
+
+   // Validate the data before updating an item
+   const {error} = amountValidation(req.body);
+
+   if (error) return res.status(400).send(error.details[0].message);
 
   Wallet.findOneAndUpdate(
     {
