@@ -32,4 +32,17 @@ const amountValidation = data => {
   return Joi.validate(data, schema);
 }
 
-module.exports = {userValidation, itemValidation, amountValidation};
+// Currency symbol validation
+const currencySymbolValidation = data => {
+  const schema = {
+    symbols: Joi.string().trim().regex(/^([a-zA-Z]{3}),?/)
+  };
+
+  return Joi.validate(data, schema);
+} 
+
+
+module.exports = {userValidation,
+                  itemValidation,
+                  amountValidation,
+                  currencySymbolValidation};

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const authRoute = require('./routes/auth');
 const itemRoute = require('./routes/items');
 const baseCurrencyRoute = require('./routes/baseCurrency');
+const ratesRoute = require('./routes/rates');
 
 dotenv.config();
 
@@ -23,5 +24,6 @@ app.use(express.json());
 app.use('/api/user', authRoute);
 app.use('/api/items', itemRoute);
 app.use('/api/base', baseCurrencyRoute);
+app.use('/api/rates', ratesRoute);
 
 app.listen(3000, () => console.log("Server listening on port 3000... "));
