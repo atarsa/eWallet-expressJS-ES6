@@ -22,14 +22,15 @@ router.get('/latest', verify, async (req, res) => {
   // *check if any parameters in body
   // *fetch latest rates from outside API
   let url;
-  if ( req.body.symbols ) {
-    // Add symbols from request body
+  
+   if ( req.query.symbols ) {
+    // Add symbols from query url
     // Check if valid
     // Validate the data before updating an item
-    const {error} = currencySymbolValidation(req.body);
+    const {error} = currencySymbolValidation(req.query);
     if (error) return res.status(400).send(error.details[0].message);
 
-    url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}&symbols=${req.body.symbols.trim().toUpperCase()}`;
+    url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}&symbols=${req.query.symbols.toUpperCase()}`;
   } else {
     
    url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}`;
@@ -49,7 +50,7 @@ function checkStatus(res) {
   if (res.ok) { // res.status >= 200 && res.status < 300
     return res;
   } else {
-    throw Error(res.statusText);
+    throw new Error(res.statusText);
   }   
 }
 
