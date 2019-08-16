@@ -10,8 +10,7 @@ npm install
 
 ## Initialising a Database
 
-- [ ] TO DO! 
-- [ ] local or on cloud??
+MongoDB will be initialized locally on the server start (assuming MongoDB is installed). 
 
 ## Running the Server
 
@@ -27,7 +26,12 @@ This will start the server running on `127.0.0.1` port `3000`.
 
 ## Making requests
 
-Requests to the server can be made to the endpoints specified in `index.js`. For details on the Model, check `Model/Wallet.js`
+Requests to the server can be made to the endpoints specified in `index.js`. For details on the Model, check `Model/Wallet.js`.
+
+For user authentication Jason Web Token is used. Following routes need `auth-token` key in request header:
+- `api/items`
+- `api/base`
+<br>
 
 ### `api/user/register`
 **POST/**
@@ -114,12 +118,29 @@ PUT http://127.0.0.1/api/base
 Gets latest currency exchange rates published by [European Central Bank](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html).
 If requested with the parameter `symbols`, the returned object will include only specified currencies.
 
-Accepted query parameters: `symbols`
+Required query parameter: `base`.
+Accepted query parameter: `symbols`
 
 ```
-GET http://localhost:3000/api/rates/latest
-GET http://localhost:3000/api/rates/latest?symbols=USD,GBP
+GET http://localhost:3000/api/rates/latest?base=GBP
+GET http://localhost:3000/api/rates/latest?base=GBP&symbols=USD,PLN
 ```
+
+### `api/rates/exchange`
+**POST /**
+Exchange money. 
+
+Required body fields: baseCurrency, exchangeCurrency, amount
+```
+POST http://127.0.0.1/api/rates/exchange
+{
+	"baseCurrency": "GBP",
+	"exchangeCurrency": "PLN",
+	"amount": 200
+}
+```
+Server should reponse with exchange's rate, exchanged amount, exchange currency and base currency.
+
 
 <br>
 
@@ -128,4 +149,5 @@ GET http://localhost:3000/api/rates/latest?symbols=USD,GBP
 The Node server uses the [Mongoose](https://mongoosejs.com/docs/guide.html) library for interacting with the MongoDB database.
 
 It uses the [Express](https://expressjs.com/) framework for running the web server and routing queries.
+
 
