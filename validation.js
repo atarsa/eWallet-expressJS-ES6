@@ -35,7 +35,8 @@ const amountValidation = data => {
 // Currency symbol validation
 const currencySymbolValidation = data => {
   const schema = {
-    symbols: Joi.string().trim().regex(/^([a-zA-Z]{3}),?/)
+    symbols: Joi.string().trim().regex(/^([a-zA-Z]{3}),?/),
+    base: Joi.string().trim().regex(/^[a-zA-Z]/)
   };
 
   return Joi.validate(data, schema);

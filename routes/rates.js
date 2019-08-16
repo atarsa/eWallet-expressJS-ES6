@@ -5,43 +5,36 @@ const Wallet = require('../model/Wallet');
 const {currencySymbolValidation} = require('../validation');
 
 // get latest currency exchange rates
-router.get('/latest', verify, async (req, res) => {
+router.get('/latest',  async (req, res) => {
 
-  const wallet = await Wallet.findById(req.wallet._id, async(err, wallet) => {
+  try {
+    let url;
+    const baseCurrency = req.query.base.toUpperCase();
     
-    if (err) {
-      console.log(err);
-      return res.status(500).send(err);
-    } 
-    
-    return wallet;
-  })
-  
-  // *get user's base currency
-  const baseCurrency = wallet.baseCurrency;
-  // *check if any parameters in body
-  // *fetch latest rates from outside API
-  let url;
-  
-   if ( req.query.symbols ) {
-    // Add symbols from query url
-    // Check if valid
-    // Validate the data before updating an item
-    const {error} = currencySymbolValidation(req.query);
-    if (error) return res.status(400).send(error.details[0].message);
+    if ( req.query.symbols ) {
+      // Add symbols from query url
+      // Check if valid
+      // Validate the data before updating an item
+      const {error} = currencySymbolValidation(req.query);
+      if (error) return res.status(400).send(error.details[0].message);
 
-    url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}&symbols=${req.query.symbols.toUpperCase()}`;
-  } else {
-    // get all currencies
-   url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}`;
+      url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}&symbols=${req.query.symbols.toUpperCase()}`;
+    } else {
+      // get all currencies
+    url = `https://api.exchangeratesapi.io/latest?base=${baseCurrency}`;
+    
+    }
+    
+    const apiResponse = await fetch(url)
+      .then(checkStatus)
+      .then(res => res.json());
+    
+    return res.send(apiResponse);
+  } catch (e){
+    console.log(e);
+    return res.send("Something went wrong. Check your query for mistakes.")
+  } 
   
-  }
-  
-  const response = await fetch(url)
-    .then(checkStatus)
-    .then(res => res.json());
-  
-  return res.send(response);
 });
 
 // "Exchange" money
@@ -59,14 +52,18 @@ router.post('/exchange',  async (req, res) => {
       const response = await fetch(url)
         .then(checkStatus)
         .then(res => res.json());
-        
-      exchangedAmount = amountToExchange / Number.parseFloat(response.rates[exchangeCurrency])  ;
+       
+      let exchangeRate = response.rates[exchangeCurrency];
+
+      exchangedAmount = amountToExchange / Number.parseFloat(exchangeRate)  ;
         
       return res.send({
         baseCurrency,
         exchangeCurrency,
+        exchangeRate,
         exchangedAmount
       });
+
    } catch(e){
       console.log(e);
       return res.status(404).send("Something went wrong. Check your request body.");
@@ -80,6 +77,7 @@ function checkStatus(res) {
     return res;
   } else {
     throw new Error(res.statusText);
+  
   }   
 }
 
