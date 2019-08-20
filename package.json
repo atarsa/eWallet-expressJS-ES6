@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devstart": "nodemon index.js"
+    "devstart": "nodemon index.js",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,12 @@
   },
   "devDependencies": {
     "eslint": "^6.1.0",
-    "nodemon": "^1.19.1"
+    "jest": "^24.9.0",
+    "mongoose-seed": "^0.6.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

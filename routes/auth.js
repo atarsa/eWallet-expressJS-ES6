@@ -26,9 +26,9 @@ router.post('/register', async (req, res) => {
 
   try {
     await wallet.save();
-    console.log('New wallet: ', wallet);
-    res.send({wallet: wallet.id});
+    res.send('Success! User registered.');
   } catch(err){
+    
     res.status(400).send(err);
    
   }
