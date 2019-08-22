@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
   // Create and assign a token
   const token = jwt.sign({_id: walletExist._id}, process.env.TOKEN_SECRET );
   console.log('walletExist._id: ', walletExist._id);
-  res.header('auth-token', token).send(token);
+  res.header('auth-token', token).send({token:token});
   //res.send('Logged in.');
 });
 

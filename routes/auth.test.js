@@ -73,5 +73,6 @@ it('Should not log in unregistered user ', async () => {
 
 afterAll(async () => {
   await Wallet.deleteMany()
+  await mongoose.connection.close()
  
 })

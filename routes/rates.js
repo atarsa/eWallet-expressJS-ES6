@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const fetch = require('node-fetch');
-const verify = require('./verifyToken');
-const Wallet = require('../model/Wallet');
+
 const {currencySymbolValidation} = require('../validation');
 
 // get latest currency exchange rates
@@ -31,8 +30,8 @@ router.get('/latest',  async (req, res) => {
     
     return res.send(apiResponse);
   } catch (e){
-    console.log(e);
-    return res.send("Something went wrong. Check your query for mistakes.")
+    
+    return res.status(404).send("Something went wrong. Check your query for mistakes.")
   } 
   
 });

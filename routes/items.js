@@ -28,8 +28,7 @@ router.post('/', verify, (req, res) => {
     currency: req.body.currency,
     amount: req.body.amount
   };
-  console.log('req.wallet._id: ', req.wallet._id);
-  // TODO: respone back; 
+ 
   Wallet.findByIdAndUpdate(req.wallet._id, {$push: { items : item}}, {safe: true, new : true}, (err, wallet) => {
     
       // Handle any possible database errors
@@ -41,7 +40,7 @@ router.post('/', verify, (req, res) => {
 
 });
 
- // TODO: response back; 
+
 // Delete item from wallet
 router.delete('/:id', verify, (req, res) =>{
   Wallet.findByIdAndUpdate(req.wallet._id,
